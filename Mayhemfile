@@ -1,0 +1,10 @@
+image: ghcr.io/capuanob/nweb-fuzz:latest
+project: nweb
+target: nweb-fuzz
+
+cmds:
+  - cmd: /nweb 8181 /nwebdir
+    network:
+      client: false
+      url: tcp://127.0.0.1:8181
+      timeout: 2.0
