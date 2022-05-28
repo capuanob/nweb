@@ -131,7 +131,7 @@ void web(int fd, int hit)
 
 int main(int argc, char **argv)
 {
-  int i, port, pid, listenfd, socketfd, hit;
+  int i, port, pid, listenfd, socketfd, hit, status, wpid;
   socklen_t length;
   static struct sockaddr_in cli_addr; /* static = initialised to zeros */
   static struct sockaddr_in serv_addr; /* static = initialised to zeros */
@@ -164,10 +164,10 @@ int main(int argc, char **argv)
     exit(4);
   }
   /* Become deamon + unstopable and no zombies children (= no wait()) */
-//if(fork() != 0)
-//  return 0; /* parent returns OK to shell */
-//  (void)signal(SIGCLD, SIG_IGN); /* ignore child death */
-//  (void)signal(SIGHUP, SIG_IGN); /* ignore terminal hangups */
+ if(fork() != 0)
+     while ((wpid = wait(&status)) > 0); // Wait on children, don't be a daemon (MAYHEM PATCH)
+  (void)signal(SIGCLD, SIG_IGN); /* ignore child death */
+  (void)signal(SIGHUP, SIG_IGN); /* ignore terminal hangups */
   for(i=0;i<32;i++)
     (void)close(i);    /* close open files */
   (void)setpgrp();    /* break away from process group */
