@@ -8,3 +8,4 @@ cmds:
       client: false
       url: tcp://127.0.0.1:8181
       timeout: 2.0
+    env: { "MFUZZ_COMPAT_LEVEL": "2" }
