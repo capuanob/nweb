@@ -7,7 +7,6 @@
 #include <signal.h>
 #include <sys/types.h>
 #include <sys/socket.h>
-#include <sys/wait.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #define VERSION 23
@@ -132,7 +131,7 @@ void web(int fd, int hit)
 
 int main(int argc, char **argv)
 {
-  int i, port, pid, listenfd, socketfd, hit, status, wpid;
+  int i, port, pid, listenfd, socketfd, hit;
   socklen_t length;
   static struct sockaddr_in cli_addr; /* static = initialised to zeros */
   static struct sockaddr_in serv_addr; /* static = initialised to zeros */
@@ -165,10 +164,10 @@ int main(int argc, char **argv)
     exit(4);
   }
   /* Become deamon + unstopable and no zombies children (= no wait()) */
- if(fork() != 0)
-     while ((wpid = wait(&status)) > 0); // Wait on children, don't be a daemon (MAYHEM PATCH)
-//  (void)signal(SIGCLD, SIG_IGN); /* ignore child death */
-//  (void)signal(SIGHUP, SIG_IGN); /* ignore terminal hangups */
+  if(fork() != 0)
+    return 0; /* parent returns OK to shell */
+  (void)signal(SIGCLD, SIG_IGN); /* ignore child death */
+  (void)signal(SIGHUP, SIG_IGN); /* ignore terminal hangups */
   for(i=0;i<32;i++)
     (void)close(i);    /* close open files */
   (void)setpgrp();    /* break away from process group */
