@@ -11,7 +11,7 @@ WORKDIR /nweb
 
 
 ## Build
-RUN clang nweb23.c -o nweb
+RUN clang nweb23.c -o nweb -DMAYHEM=1
 
 ## Prepare all library dependencies for copy
 RUN mkdir /deps
@@ -24,5 +24,4 @@ COPY --from=builder /nweb/nweb /nweb
 COPY --from=builder /deps /usr/lib
 
 RUN mkdir /nwebdir
-#env AFL_NO_FORKSRV=1
-CMD /nweb 8181 /nwebdir
+ENV AFL_NO_FORKSRV=1
