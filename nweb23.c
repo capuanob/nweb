@@ -9,9 +9,6 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-#ifdef MAYHEM
-#include <sys/wait.h>
-#endif
 #define VERSION 23
 #define BUFSIZE 8096
 #define ERROR      42
@@ -167,9 +164,7 @@ int main(int argc, char **argv)
     exit(4);
   }
 #ifdef MAYHEM
-    pid_t child_pid = fork();
-    if(fork() != 0)
-        while(wait(&child_pid) > 0); // Mayhem patch to prevent parent instantly ending
+  signal(SIGCHLD, SIG_IGN); // Bug in source program, prevents process table from filling with zombies
 #else
   /* Become deamon + unstopable and no zombies children (= no wait()) */
   if(fork() != 0)

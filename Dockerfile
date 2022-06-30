@@ -22,3 +22,4 @@ COPY --from=builder /nweb/nweb /nweb
 COPY --from=builder /deps /usr/lib
 
 RUN mkdir /nwebdir
+ENV AFL_NO_FORKSRV=1
