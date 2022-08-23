@@ -8,4 +8,4 @@ cmds:
       url: tcp://127.0.0.1:8181
       timeout: 2.0
     env:
-        AFL_MAP_SIZE: "10000000"
+        AFL_NO_FORKSRV: "1"
